@@ -11,9 +11,10 @@ import javax.mail.internet.AddressException;
 public class ValidateAndVerify {
 	final String regexForGmail = "^[A-Za-z0-9+.]+@(.+)$";
 	final String regexForOutlook = "^[A-Za-z0-9+_.-]+@(.+)$";
-	
+	private String username, TLD;
+
 	// Separates the host from the email address for setting up system properties
-	public String separateHost(GetInput input, String receiverEmail) {
+	public void separateHost(GetInput input, String receiverEmail) {
 		Pattern pattern = Pattern.compile("(\\S.*\\S)(@)(\\S.*\\S)(.\\S[a-z]{2,3})");
         Matcher matcherForReceiver = pattern.matcher(receiverEmail);
         Matcher matcherForSender = pattern.matcher(input.getFrom());
@@ -22,6 +23,8 @@ public class ValidateAndVerify {
             System.out.println("Username: " + matcherForReceiver.group(1));
             System.out.println("Hosting Service: " + matcherForReceiver.group(3));
             System.out.println("TLD: " + matcherForReceiver.group(4));
+        	username =  matcherForReceiver.group(1);
+        	TLD = matcherForReceiver.group(4);
             input.setHost(matcherForReceiver.group(3));
             System.out.println("Hosting Service: " + input.getHost());
         }	
@@ -34,27 +37,37 @@ public class ValidateAndVerify {
             input.setFromHost(matcherForSender.group(3));
             System.out.println("Hosting Service: " + input.getFromHost());
         }
-        return matcherForReceiver.group(4);
 	}
 	
 	// Checks if the receipient's email matches to the server's email address requirements
 	public boolean validateEmail(String receiverEmail, GetInput input) throws AddressException, UnknownHostException {
-		boolean result = receiverEmail.matches(regexForGmail);
+		boolean isValidUsername = false;
 		
-		String TLD = this.separateHost(input, receiverEmail);
-		
-		InetAddress inetAddress = InetAddress.getByName(input.getHost() + TLD);
-	    System.out.println(inetAddress.getHostAddress());
+		separateHost(input, receiverEmail);
+
+		if (input.getHost().equalsIgnoreCase("gmail")) {
+			isValidUsername = receiverEmail.matches(regexForGmail);
+		}
+		else if (input.getHost().equalsIgnoreCase("outlook")) {
+			isValidUsername = receiverEmail.matches(regexForOutlook);
+		}
+
 	    try {
-			System.out.println(inetAddress.isReachable(100));
+	    	InetAddress inetAddress = InetAddress.getByName(input.getHost() + TLD);
+			inetAddress.isReachable(10);
 		} 
 	    catch (IOException e) {
 			e.printStackTrace();
+			System.out.println("ERROR: Domain does not exist. Exiting program...");
+			System.exit(0);
 		}
 	    
-		if(result) System.out.println("Given email-id is valid");
-		else System.out.println("Given email-id is not valid");
+		if(isValidUsername) {
+			System.out.println("Given email-id is valid");
+			return true;
+		}
 		
-        return result;
+		System.out.println("Given email-id is not valid");
+		return false;
     }
 }
