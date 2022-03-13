@@ -14,11 +14,9 @@ public class SendEmail {
 	static void sendingEmail(String message, String subject, GetInput input) {
 		final String password = input.getPassword();
 		String host = "smtp." + input.getFromHost() + ".com";
-		
 
 		// Gets the system properties
 		Properties properties = System.getProperties();
-		//System.out.println("PROPERTIES " +properties);
 
 		// Sets important information to properties object
 		properties.put("mail.smtp.host", host);

@@ -1,14 +1,16 @@
 package com.main.MainMailingApp;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 
 public class App 
 {
 	// - Read a file that has the message
-	public static void main( String[] args ) throws UnknownHostException { 
+	public static void main( String[] args ) throws MessagingException, IOException { 
 		System.out.println("---------- Welcome to iEmail ----------");
 		System.out.println("Please login...");
 		
@@ -30,12 +32,12 @@ public class App
 			switch(choice) {
 			case "1":
 				System.out.println("---------- SEND EMAIL OPTION ----------");
+				// TODO: Read a file where email addresses are stored
 				System.out.println("Type below the email address who you'll send this email to...");
 				input.setTo(sc.next());
 				String receiverEmail = input.getTo();
 				
 				ValidateAndVerify demo = new ValidateAndVerify();
-//				demo.separateHost(input, email);
 				
 				try {
 					boolean isValid = demo.validateEmail(receiverEmail, input);
@@ -48,6 +50,8 @@ public class App
 				break;
 			case "2": 
 				System.out.println("---------- YOUR INBOX ----------");
+				ReceiveEmail receive = new ReceiveEmail();
+				receive.retrieveEmail(input);
 				break;
 			case "3":
 				sc.close();
