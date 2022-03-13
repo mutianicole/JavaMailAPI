@@ -1,19 +1,28 @@
 package com.main.MainMailingApp;
 
 public class GetInput {
-	private String host;
+	private String Tohost;
+	private String fromHost;
 	private String message;
 	private String subject;
 	private String to;
 	private String from;
 	private String password;
-	
-    public String getHost() {
-		return host;
+
+	public String getHost() {
+		return Tohost;
 	}
 
 	public void setHost(String host) {
-		this.host = host;
+		this.Tohost = host;
+	}
+	
+	public String getFromHost() {
+		return fromHost;
+	}
+
+	public void setFromHost(String fromHost) {
+		this.fromHost = fromHost;
 	}
 
 	public String getMessage() {

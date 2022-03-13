@@ -13,7 +13,8 @@ import javax.mail.internet.MimeMessage;
 public class SendEmail {
 	static void sendingEmail(String message, String subject, GetInput input) {
 		final String password = input.getPassword();
-		String host = "smtp." + input.getHost() + ".com";
+		String host = "smtp." + input.getFromHost() + ".com";
+		
 
 		// Gets the system properties
 		Properties properties = System.getProperties();
