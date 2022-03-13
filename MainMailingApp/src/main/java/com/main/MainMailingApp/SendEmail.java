@@ -1,5 +1,9 @@
 package com.main.MainMailingApp;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -11,7 +15,38 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class SendEmail {
-	static void sendingEmail(String message, String subject, GetInput input) {
+	
+	public static String readFile() {
+		String strLine = " ";
+		try{
+            // Open the file that is the first 
+            // command line parameter
+            FileInputStream fstream = new FileInputStream("sample.txt");
+            // Get the object of DataInputStream
+            DataInputStream in = new DataInputStream(fstream);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
+          //Read File Line By Line
+            String line;
+            
+            while ((line = br.readLine()) != null)   {
+                // Print the content on the console
+                strLine += line;
+            }
+            System.out.println (strLine);
+            //Close the input stream
+            in.close();
+        }
+		catch (Exception e){//Catch exception if any
+            System.err.println("Error: " + e.getMessage());
+        }
+		return strLine;
+	}
+	
+	static void sendingEmail(String subject, GetInput input) {
+		final String body = readFile();
+		System.out.println(body);
+		
 		final String password = input.getPassword();
 		String host = "smtp." + input.getFromHost() + ".com";
 
@@ -42,17 +77,17 @@ public class SendEmail {
 			// Sets the sender's email 
 			m.setFrom(input.getFrom());
 	
-			// Adds recipient's email to the message
+			// Adds recipient's email to the email
 			m.addRecipient(Message.RecipientType.TO, new InternetAddress(input.getTo()));
 	
-			// Adds email subject to message
+			// Adds email subject to email
 			m.setSubject(subject);
 	
 	
-			// Adds text to message
-			m.setText(message);
+			// Adds message to the email
+			m.setText(body);
 	
-			// Sends the message using Transport class
+			// Sends the email using Transport class
 			Transport.send(m);
 	
 			System.out.println("Email sent success...................");

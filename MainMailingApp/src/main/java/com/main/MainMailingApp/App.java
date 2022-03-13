@@ -10,7 +10,7 @@ import javax.mail.internet.AddressException;
 public class App 
 {
 	// - Read a file that has the message
-	public static void main( String[] args ) throws MessagingException, IOException { 
+	public static void main(String[] args) throws MessagingException, IOException { 
 		System.out.println("---------- Welcome to iEmail ----------");
 		System.out.println("Please login...");
 		
@@ -37,11 +37,17 @@ public class App
 				input.setTo(sc.next());
 				String receiverEmail = input.getTo();
 				
+				
+//				WriteEmail write = new WriteEmail();
+////				write.readFile();
+//				
+				
+				
 				ValidateAndVerify demo = new ValidateAndVerify();
 				
 				try {
 					boolean isValid = demo.validateEmail(receiverEmail, input);
-					if (isValid) SendEmail.sendingEmail("TESTING IF THIS WORKS", "Code Test", input);
+					if (isValid) SendEmail.sendingEmail("Code Test", input);
 					else System.out.println("The email you typed is not valid or does not exist...");
 				} 
 				catch (AddressException e) {
