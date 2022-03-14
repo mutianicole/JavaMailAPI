@@ -2,6 +2,7 @@ package com.main.MainMailingApp;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.mail.MessagingException;
@@ -33,25 +34,9 @@ public class App
 				System.out.println("---------- SEND EMAIL OPTION ----------");
 				SendEmail s = new SendEmail();
 				ValidateAndVerify demo = new ValidateAndVerify();
-				s.getRecipients(demo, input);
+				List<String> emails = s.getEmails(demo, input);
 				
-				
-				
-//				// TODO: Read a file where email addresses are stored
-//				System.out.println("Type below the email address who you'll send this email to...");
-//				input.setTo(sc.next());
-//				String receiverEmail = input.getTo();
-//			
-//				ValidateAndVerify demo = new ValidateAndVerify();
-//				
-//				try {
-//					boolean isValid = demo.validateEmail(receiverEmail, input);
-//					if (isValid) SendEmail.sendingEmail("Code Test", input);
-//					else System.out.println("The email you typed is not valid or does not exist...");
-//				} 
-//				catch (AddressException e) {
-//					e.printStackTrace();
-//				}
+				s.sendingEmail("Code Test", input, emails);
 				break;
 			case "2": 
 				System.out.println("---------- YOUR INBOX ----------");

@@ -14,6 +14,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.mail.Address;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
@@ -50,7 +51,7 @@ public class SendEmail {
 		return sb.toString();
 	}
 	
-	public List<String> getRecipients(ValidateAndVerify demo, GetInput input) throws IOException, AddressException {
+	public List<String> getEmails(ValidateAndVerify demo, GetInput input) throws IOException, AddressException {
 		FileInputStream fstream = new FileInputStream("emails.txt");
 		DataInputStream in = new DataInputStream(fstream);
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -68,8 +69,16 @@ public class SendEmail {
 		return emails;
 	}
 	
+	private static Address[] getRecipients(List<String> emails) throws AddressException {
+        Address[] addresses = new Address[emails.size()];
+        for (int i =0;i < emails.size();i++) {
+            addresses[i] = new InternetAddress(emails.get(i));
+        }
+        return addresses;
+    }
+	
 	// Sends the email to receiver's email inbox
-	static void sendingEmail(String subject, GetInput input) {
+	static void sendingEmail(String subject, GetInput input, List<String> emails) {
 		final String body = readFile();
 		System.out.println(body);
 		
@@ -104,7 +113,9 @@ public class SendEmail {
 			m.setFrom(input.getFrom());
 	
 			// Adds recipient's email to the email
-			m.addRecipient(Message.RecipientType.TO, new InternetAddress(input.getTo()));
+			//m.addRecipient(Message.RecipientType.TO, new InternetAddress(input.getTo()));
+			
+			m.setRecipients(Message.RecipientType.TO, getRecipients(emails));
 	
 			// Adds email subject to email
 			m.setSubject(subject);
