@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,12 +19,13 @@ import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class SendEmail {
 	
-	String[] array;
+	ArrayList<String> emails = new ArrayList<>();
 	public static String readFile() {
 		String strLine = " ";
 		StringBuffer sb = new StringBuffer();
@@ -48,18 +50,22 @@ public class SendEmail {
 		return sb.toString();
 	}
 	
-	// TODO LATER: Create a new class for this
-	public static void getReceipients() throws IOException {
-		// Reads a file line by line
+	public List<String> getRecipients(ValidateAndVerify demo, GetInput input) throws IOException, AddressException {
 		FileInputStream fstream = new FileInputStream("emails.txt");
 		DataInputStream in = new DataInputStream(fstream);
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
-		ValidateAndVerify demo = new ValidateAndVerify();
+//		ValidateAndVerify demo = new ValidateAndVerify();
 		String line;
+		boolean isValid = false;
 		
 		while((line = br.readLine()) != null) {
 			// Checks if email address is valid. If so, add in the recipient list
+			System.out.println(line);
+			isValid = demo.validateEmail(line, input);
+			if (isValid) emails.add(line);	
 		}
+		System.out.println("EMAILS: " + emails + "*****************************8");
+		return emails;
 	}
 	
 	// Sends the email to receiver's email inbox

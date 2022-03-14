@@ -20,6 +20,7 @@ public class ValidateAndVerify {
         Matcher matcherForSender = pattern.matcher(input.getFrom());
         
         if (matcherForReceiver.matches()) {
+        	System.out.println("RECEIVER------");
             System.out.println("Username: " + matcherForReceiver.group(1));
             System.out.println("Hosting Service: " + matcherForReceiver.group(3));
             System.out.println("TLD: " + matcherForReceiver.group(4));
@@ -37,6 +38,7 @@ public class ValidateAndVerify {
             input.setFromHost(matcherForSender.group(3));
             System.out.println("Hosting Service: " + input.getFromHost());
         }
+        System.out.println();
 	}
 	
 	// Checks if the receipient's email matches to the server's email address requirements
