@@ -9,7 +9,6 @@ import javax.mail.internet.AddressException;
 
 public class App 
 {
-	// - Read a file that has the message
 	public static void main(String[] args) throws MessagingException, IOException { 
 		System.out.println("---------- Welcome to iEmail ----------");
 		System.out.println("Please login...");
@@ -36,13 +35,7 @@ public class App
 				System.out.println("Type below the email address who you'll send this email to...");
 				input.setTo(sc.next());
 				String receiverEmail = input.getTo();
-				
-				
-//				WriteEmail write = new WriteEmail();
-////				write.readFile();
-//				
-				
-				
+			
 				ValidateAndVerify demo = new ValidateAndVerify();
 				
 				try {

@@ -2,9 +2,16 @@ package com.main.MainMailingApp;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -16,33 +23,46 @@ import javax.mail.internet.MimeMessage;
 
 public class SendEmail {
 	
+	String[] array;
 	public static String readFile() {
 		String strLine = " ";
+		StringBuffer sb = new StringBuffer();
 		try{
-            // Open the file that is the first 
-            // command line parameter
-            FileInputStream fstream = new FileInputStream("sample.txt");
-            // Get the object of DataInputStream
-            DataInputStream in = new DataInputStream(fstream);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			File file = new File("sample.txt");    //creates a new file instance
+            FileReader fr = new FileReader(file);   //reads the file
+            BufferedReader br = new BufferedReader(fr);  //creates a buffering character input stream
+                //constructs a string buffer with no characters
 
-          //Read File Line By Line
-            String line;
-            
-            while ((line = br.readLine()) != null)   {
-                // Print the content on the console
-                strLine += line;
+            while((strLine = br.readLine())!=null)
+            {
+                sb.append(strLine);      //appends line to string buffer
+                sb.append("\n");//line feed
             }
-            System.out.println (strLine);
-            //Close the input stream
-            in.close();
+                fr.close();    //closes the stream and release the resources
+                System.out.println("Contents of File: ");
+                // System.out.println(sb.toString());
         }
-		catch (Exception e){//Catch exception if any
+		catch (Exception e) { // If we get here, there's a problem opening the file
             System.err.println("Error: " + e.getMessage());
         }
-		return strLine;
+		return sb.toString();
 	}
 	
+	// TODO LATER: Create a new class for this
+	public static void getReceipients() throws IOException {
+		// Reads a file line by line
+		FileInputStream fstream = new FileInputStream("emails.txt");
+		DataInputStream in = new DataInputStream(fstream);
+		BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		ValidateAndVerify demo = new ValidateAndVerify();
+		String line;
+		
+		while((line = br.readLine()) != null) {
+			// Checks if email address is valid. If so, add in the recipient list
+		}
+	}
+	
+	// Sends the email to receiver's email inbox
 	static void sendingEmail(String subject, GetInput input) {
 		final String body = readFile();
 		System.out.println(body);
@@ -83,14 +103,13 @@ public class SendEmail {
 			// Adds email subject to email
 			m.setSubject(subject);
 	
-	
 			// Adds message to the email
 			m.setText(body);
 	
 			// Sends the email using Transport class
 			Transport.send(m);
 	
-			System.out.println("Email sent success...................");
+			System.out.println("Email successfully sent...................");
 		} 
 		catch (Exception e) { // If we got here, an error has been found
 			e.printStackTrace();
